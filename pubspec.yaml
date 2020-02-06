@@ -28,6 +28,7 @@ dependencies:
   provider: ^4.0.2
   dio: ^3.0.8
   json_annotation: ^3.0.0
+  toast: ^0.1.5
 
 dev_dependencies:
   json_serializable: ^3.2.0
