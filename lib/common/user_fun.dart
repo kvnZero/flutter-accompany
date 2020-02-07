@@ -34,6 +34,44 @@ class UserFun{
       return {'msg':'无法连接到服务器'};
     }
     return {'msg':'未知错误'};
-
+  }
+  static Future<Map> sendcode(String phone) async{
+    try {
+      Response response = await Dio().get("http://127.0.0.1:8000/code/$phone");
+      print(response.data);
+      if(response.statusCode==200){
+        return {'msg':'发送成功'};
+      }
+    }on DioError catch(e) {
+      print(e);
+      if(e.response.statusCode==400){
+        return {'msg':'手机号码已经被注册'};
+      }
+      return {'msg':'网络连接失败'};
+    }
+    return {'msg':'未知错误'};
+  }
+  static Future<Map> reg(String phone,String password, String code) async{
+    try {
+      Response response = await Dio().post("http://127.0.0.1:8000/reg",
+          data: {'username':phone.trim(), 'password': password, 'code':code.trim()}
+          );
+      if(response.statusCode==200){
+        if(response.data['message']=='succeed reg'){
+          return {'msg':'注册成功'};
+        }else if(response.data['message']=='error code'){
+          return {'msg':'验证码输入错误'};
+        }else if(response.data['message']=='error reg'){
+          return {'msg':'未知原因注册失败'};
+        }
+      }
+    }on DioError catch(e) {
+      print(e);
+      if(e.response.statusCode==400){
+        return {'msg':'手机号码已经被注册'};
+      }
+      return {'msg':'网络连接失败'};
+    }
+    return {'msg':'未知错误'};
   }
 }
