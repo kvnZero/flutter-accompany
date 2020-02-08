@@ -150,46 +150,55 @@ class _FindPageState extends State<FindPage> {
                               if (_unameController.text.trim().length == 11 &&
                                   _pwordController.text.trim().length >= 6 &&
                                   _codeController.text.trim().length == 6) {
+                                BuildContext _dialogC;
+                                showDialog(context: context,builder: (BuildContext context){
+                                  _dialogC = context;
+                                  return Center(child: CircularProgressIndicator(),);
+                                });
                                 Future<Map> msg = UserFun?.find(
                                     _unameController.text.trim(),
                                     _pwordController.text,
                                     _codeController.text.trim());
-                                msg.then((e) {
-                                  IconData showIcon = e['result'] == true
-                                      ? Icons.done
-                                      : Icons.error;
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return Dialog(
-                                          child: Container(
-                                            padding: EdgeInsets.only(top: 10),
-                                            height: 130,
-                                            child: Column(
-                                              children: <Widget>[
-                                                Icon(
-                                                  showIcon,
-                                                  size: 40,
-                                                ),
-                                                Text(e['msg']),
-                                                RaisedButton(
-                                                  onPressed: () {
-                                                    if (e['result'] == true) {
-                                                      //返回登陆
-                                                      Navigator.pop(context);
-                                                      Navigator.pop(fcontext);
-                                                    } else {
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    }
-                                                  },
-                                                  child: Text("确定"),
-                                                )
-                                              ],
+                                Future.delayed(Duration(seconds: 1), (){
+                                  //延迟一秒 防止异步出错
+                                  msg.then((e) {
+                                    IconData showIcon = e['result'] == true
+                                        ? Icons.done
+                                        : Icons.error;
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return Dialog(
+                                            child: Container(
+                                              padding: EdgeInsets.only(top: 10),
+                                              height: 130,
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Icon(
+                                                    showIcon,
+                                                    size: 40,
+                                                  ),
+                                                  Text(e['msg']),
+                                                  RaisedButton(
+                                                    onPressed: () {
+                                                      if (e['result'] == true) {
+                                                        //返回登陆
+                                                        Navigator.pop(context);
+                                                        Navigator.pop(fcontext);
+                                                      } else {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      }
+                                                    },
+                                                    child: Text("确定"),
+                                                  )
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        );
-                                      });
+                                          );
+                                        });
+                                  });
+                                  Navigator.pop(_dialogC);
                                 });
                               } else {
                                 //如果输入有误 弹出显示框

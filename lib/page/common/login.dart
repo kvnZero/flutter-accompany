@@ -92,12 +92,21 @@ class LoginScreenState extends State<LoginScreen>{
                                       textColor: Colors.white,
                                       onPressed: () {
                                         if(_unameController.text.trim().length > 0 && _pwordController.text.trim().length >= 3){
-                                          Future<String> msg = user.login(username: _unameController.text, password: _pwordController.text);
-                                          msg.then((v){
-                                            if (v.isNotEmpty) {
-                                              //如果报错 toast错误
-                                              Toast.show(v, context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
-                                            }
+                                          BuildContext _dialogC;
+                                          showDialog(context: context,builder: (BuildContext context){
+                                            _dialogC = context;
+                                            return Center(child: CircularProgressIndicator(),);
+                                          });
+                                          Future.delayed(Duration(seconds: 1), (){
+                                            Future<String> msg = user.login(username: _unameController.text, password: _pwordController.text);
+                                            //延迟一秒 防止异步出错
+                                            msg.then((v){
+                                              if (v.isNotEmpty) {
+                                                //如果报错 toast错误
+                                                Toast.show(v, context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+                                              }
+                                            });
+                                            Navigator.pop(_dialogC);
                                           });
                                         }else{
                                           //如果输入有误 toast错误
