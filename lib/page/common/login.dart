@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:accompany/data/models/auth.dart';
 import 'package:toast/toast.dart';
 import 'package:accompany/page/common/reg.dart';
+import 'package:accompany/page/common/find.dart';
 
 class LoginScreen extends StatefulWidget{
   @override
@@ -119,7 +120,10 @@ class LoginScreenState extends State<LoginScreen>{
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => RegPage()));
                     }, child: Text("注册账户",style: TextStyle(fontWeight: FontWeight.w400,color: Colors.blue[500]),)),
-                    FlatButton(onPressed: (){}, child: Text("忘记密码",style: TextStyle(fontWeight: FontWeight.w400,color: Colors.black54),)),
+                    FlatButton(onPressed: (){
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => FindPage()));
+                    }, child: Text("忘记密码",style: TextStyle(fontWeight: FontWeight.w400,color: Colors.black54),)),
                   ],
                 ),
               ),

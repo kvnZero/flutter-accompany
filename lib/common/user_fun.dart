@@ -83,4 +83,25 @@ class UserFun{
     }
     return {'msg':'未知错误'};
   }
+  static Future<Map> find(String phone,String password, String code) async{
+    try {
+      Response response = await Dio().post("http://127.0.0.1:8000/find",
+          data: {'username':phone.trim(), 'password': password, 'code':code.trim()}
+      );
+      if(response.statusCode==200){
+        if(response.data['message']=='succeed find'){
+          return {'msg':'密码重置成功','result':true};
+        }else if(response.data['message']=='error code'){
+          return {'msg':'验证码输入错误','result':false};
+        }else if(response.data['message']=='error phone'){
+          return {'msg':'手机号码未注册','result':false};
+        }else{
+          return {'msg':'未知错误','result':false};
+        }
+      }
+    }on DioError catch(e) {
+      return {'msg':'网络连接失败','result':false};
+    }
+    return {'msg':'未知错误','result':false};
+  }
 }
