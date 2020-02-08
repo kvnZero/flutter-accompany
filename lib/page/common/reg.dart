@@ -9,14 +9,13 @@ class RegPage extends StatefulWidget {
 }
 
 class _RegPageState extends State<RegPage> {
+  TextEditingController _unameController = new TextEditingController();
+  TextEditingController _pwordController = new TextEditingController();
+  TextEditingController _codeController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     BuildContext fcontext = context;
-
-    TextEditingController _unameController = new TextEditingController();
-    TextEditingController _pwordController = new TextEditingController();
-    TextEditingController _codeController = new TextEditingController();
-
     GlobalKey _formKey = new GlobalKey<FormState>();
     return Scaffold(
         appBar: AppBar(
@@ -51,6 +50,7 @@ class _RegPageState extends State<RegPage> {
                                     BorderRadius.all(Radius.circular(8)),
                               ),
                             ),
+
                             style: TextStyle(fontSize: 14),
                           ),
                         ),
@@ -85,13 +85,24 @@ class _RegPageState extends State<RegPage> {
                                           duration: Toast.LENGTH_SHORT,
                                           gravity: Toast.BOTTOM);
                                     } else {
-                                      Future<Map> msg = UserFun?.sendcode(
-                                          _unameController.text);
-                                      msg.then((e) {
-                                        Toast.show(e['msg'], context,
-                                            duration: Toast.LENGTH_SHORT,
-                                            gravity: Toast.BOTTOM);
-                                      });
+                                      if(_unameController.text.trim().length==11) {
+                                        Future<bool> msg = UserFun?.check(_unameController.text.trim());
+                                        msg.then((e){
+                                          if(e==true){
+                                            Toast.show("该手机号码已注册", context,
+                                                duration: Toast.LENGTH_SHORT,
+                                                gravity: Toast.BOTTOM);
+                                          }else{
+                                            Future<Map> msg = UserFun?.sendcode(
+                                                _unameController.text);
+                                            msg.then((e) {
+                                              Toast.show(e['msg'], context,
+                                                  duration: Toast.LENGTH_SHORT,
+                                                  gravity: Toast.BOTTOM);
+                                            });
+                                          }
+                                        });
+                                      }
                                     }
                                   },
                                   child: Text(

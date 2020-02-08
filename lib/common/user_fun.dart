@@ -44,12 +44,21 @@ class UserFun{
       }
     }on DioError catch(e) {
       print(e);
-      if(e.response.statusCode==400){
-        return {'msg':'手机号码已经被注册'};
-      }
-      return {'msg':'网络连接失败'};
+      return {'msg':'发送失败'};
     }
     return {'msg':'未知错误'};
+  }
+  static Future<bool> check(String phone) async{
+    try {
+      Response response = await Dio().get("http://127.0.0.1:8000/check/$phone");
+      print(response.data);
+      if(response.statusCode==200){
+        return response.data['exist'];
+      }
+    }on DioError catch(e) {
+      print(e);
+    }
+    return false;
   }
   static Future<Map> reg(String phone,String password, String code) async{
     try {
