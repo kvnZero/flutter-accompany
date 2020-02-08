@@ -37,17 +37,20 @@ class LoginScreenState extends State<LoginScreen>{
                 width: MediaQuery.of(context).size.width/1.5,
                 child:Image.asset('images/logo.png',fit: BoxFit.fill,),
               ),
-              Container(
-                  child: Form(
-                      key: _formKey,
-                      autovalidate: false,
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            width: MediaQuery.of(context).size.width/1.3,
-                            child: TextFormField(
+              Theme(
+                data: new ThemeData(primaryColor: Colors.blue),
+                child: Container(
+                    child: Form(
+                        key: _formKey,
+                        autovalidate: false,
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              width: MediaQuery.of(context).size.width/1.3,
+                              child: TextFormField(
                                 autofocus: true,
                                 controller: _unameController,
+                                cursorColor: Colors.blue,
                                 decoration: InputDecoration(
                                   hintText: "手机号",
                                   icon: Icon(Icons.person,),
@@ -57,12 +60,12 @@ class LoginScreenState extends State<LoginScreen>{
                                   ),
                                 ),
                                 style: TextStyle(fontSize: 14),
+                              ),
                             ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top:0),
-                            width: MediaQuery.of(context).size.width/1.3,
-                            child: TextFormField(
+                            Container(
+                              margin: EdgeInsets.only(top:0),
+                              width: MediaQuery.of(context).size.width/1.3,
+                              child: TextFormField(
                                 controller: _pwordController,
                                 decoration: InputDecoration(
                                   hintText: "登录密码",
@@ -74,38 +77,39 @@ class LoginScreenState extends State<LoginScreen>{
                                 ),
                                 style: TextStyle(fontSize: 14),
                                 obscureText: true,
+                              ),
                             ),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width/1.3,
-                            height: 40,
-                            margin: const EdgeInsets.only(top: 10.0),
-                            child: Consumer<AuthModel>(
-                              builder: (context, user, child) {
-                                return RaisedButton(
-                                  color: Colors.blue[400],
-                                  child: Text("登  录",style: TextStyle(fontSize: 16),),
-                                  textColor: Colors.white,
-                                  onPressed: () {
-                                    if(_unameController.text.trim().length > 0 && _pwordController.text.trim().length >= 3){
-                                      Future<String> msg = user.login(username: _unameController.text, password: _pwordController.text);
-                                      msg.then((v){
-                                        if (v.isNotEmpty) {
-                                          //如果报错 toast错误
-                                          Toast.show(v, context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+                            Container(
+                              width: MediaQuery.of(context).size.width/1.3,
+                              height: 40,
+                              margin: const EdgeInsets.only(top: 10.0),
+                              child: Consumer<AuthModel>(
+                                  builder: (context, user, child) {
+                                    return RaisedButton(
+                                      color: Colors.blue[400],
+                                      child: Text("登  录",style: TextStyle(fontSize: 16),),
+                                      textColor: Colors.white,
+                                      onPressed: () {
+                                        if(_unameController.text.trim().length > 0 && _pwordController.text.trim().length >= 3){
+                                          Future<String> msg = user.login(username: _unameController.text, password: _pwordController.text);
+                                          msg.then((v){
+                                            if (v.isNotEmpty) {
+                                              //如果报错 toast错误
+                                              Toast.show(v, context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+                                            }
+                                          });
+                                        }else{
+                                          //如果输入有误 toast错误
+                                          Toast.show("请检查输入", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
                                         }
-                                      });
-                                    }else{
-                                      //如果输入有误 toast错误
-                                      Toast.show("请检查输入", context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
-                                    }
-                                  },
-                                );
-                              }
+                                      },
+                                    );
+                                  }
+                              ),
                             ),
-                          ),
-                        ],
-                      ))
+                          ],
+                        ))
+                ),
               ),
               Container(
                 child: Row(
