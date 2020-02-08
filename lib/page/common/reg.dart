@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import 'package:accompany/common/user_fun.dart';
-import 'login.dart';
 
 class RegPage extends StatefulWidget {
   @override
