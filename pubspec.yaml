@@ -29,6 +29,8 @@ dependencies:
   dio: ^3.0.8
   json_annotation: ^3.0.0
   toast: ^0.1.5
+  amap_location: ^0.2.0
+  simple_permissions: ^0.1.9
 
 dev_dependencies:
   json_serializable: ^3.2.0

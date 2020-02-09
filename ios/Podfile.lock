@@ -1,4 +1,10 @@
 PODS:
+  - amap_location (0.0.1):
+    - AMapLocation
+    - Flutter
+  - AMapFoundation (1.6.2)
+  - AMapLocation (2.6.4):
+    - AMapFoundation (~> 1.6.1)
   - Flutter (1.0.0)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
@@ -11,23 +17,32 @@ PODS:
     - Flutter
   - shared_preferences_web (0.0.1):
     - Flutter
+  - simple_permissions (0.0.1):
+    - Flutter
   - sqflite (0.0.1):
     - Flutter
     - FMDB (~> 2.7.2)
 
 DEPENDENCIES:
+  - amap_location (from `.symlinks/plugins/amap_location/ios`)
   - Flutter (from `Flutter`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - shared_preferences_macos (from `.symlinks/plugins/shared_preferences_macos/ios`)
   - shared_preferences_web (from `.symlinks/plugins/shared_preferences_web/ios`)
+  - simple_permissions (from `.symlinks/plugins/simple_permissions/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
 
 SPEC REPOS:
+  https://mirrors.tuna.tsinghua.edu.cn/git/CocoaPods/Specs.git:
+    - AMapFoundation
+    - AMapLocation
   trunk:
     - FMDB
 
 EXTERNAL SOURCES:
+  amap_location:
+    :path: ".symlinks/plugins/amap_location/ios"
   Flutter:
     :path: Flutter
   path_provider:
@@ -38,18 +53,24 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_macos/ios"
   shared_preferences_web:
     :path: ".symlinks/plugins/shared_preferences_web/ios"
+  simple_permissions:
+    :path: ".symlinks/plugins/simple_permissions/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
+  amap_location: a3e2a140bb25950d4e97560ce1b00e53a121e4f4
+  AMapFoundation: 672dc3a4759cb733f447c1e1b020f7ba2729f4ab
+  AMapLocation: b4162db67f813508a14ee7e05c7ee4073785221d
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
   shared_preferences: 430726339841afefe5142b9c1f50cb6bd7793e01
   shared_preferences_macos: f3f29b71ccbb56bf40c9dd6396c9acf15e214087
   shared_preferences_web: 141cce0c3ed1a1c5bf2a0e44f52d31eeb66e5ea9
+  simple_permissions: 149cd87a11f83c24bf99f6e8a82f9fc8b70be233
   sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
 
-PODFILE CHECKSUM: 1289fac759e4c922e945a3bd3a86c84375a960cc
+PODFILE CHECKSUM: 7576e97e1a1aeaeb5397d3cc574caf5f5eb2a460
 
 COCOAPODS: 1.8.4

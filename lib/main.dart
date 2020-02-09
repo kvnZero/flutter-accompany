@@ -2,8 +2,17 @@ import 'package:accompany/data/models/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:accompany/page/common/login.dart';
+import 'package:amap_location/amap_location.dart';
+import 'page/home/home_index.dart';
+import 'dart:io';
 
-void main() => runApp(MyApp());
+void main(){
+//  WidgetsFlutterBinding.ensureInitialized();
+  if(Platform.isIOS){
+    AMapLocationClient.setApiKey("b21988cfc4b2a79deafb2b8a03023b25");
+  }
+  runApp(MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -16,6 +25,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    AMapLocationClient.startup(new AMapLocationOption( desiredAccuracy:CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
     try {
       _auth.loadLogged();
     } catch (e) {
@@ -73,7 +83,7 @@ class _SalashPageState extends State<SalashPage> {
   void goToHomePage(){
     Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context)=>Consumer<AuthModel>(builder: (context, user, child) {
       if (user?.user != null) {
-        return new MyHomePage(title: 'Flutter Demo Home Page');
+        return new HomeIndex();
       }else{
         return new LoginScreen();
       }
