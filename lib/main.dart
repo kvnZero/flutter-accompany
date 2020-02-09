@@ -2,15 +2,9 @@ import 'package:accompany/data/models/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:accompany/page/common/login.dart';
-import 'package:amap_location/amap_location.dart';
 import 'page/home/home_index.dart';
 import 'dart:io';
-
 void main(){
-//  WidgetsFlutterBinding.ensureInitialized();
-  if(Platform.isIOS){
-    AMapLocationClient.setApiKey("b21988cfc4b2a79deafb2b8a03023b25");
-  }
   runApp(MyApp());
 }
 
@@ -25,13 +19,18 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    AMapLocationClient.startup(new AMapLocationOption( desiredAccuracy:CLLocationAccuracy.kCLLocationAccuracyHundredMeters));
     try {
       _auth.loadLogged();
     } catch (e) {
       print("Error Loading Settings: $e");
     }
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
