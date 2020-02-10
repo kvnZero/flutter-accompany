@@ -8,12 +8,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthModel extends ChangeNotifier{
   User _user;
 
-  Future<String> loadLogged() async {
+  Future<String> loadLogged({Map other}) async {
     //如果是已经登陆的用户 获取存储在本地的token验证是否过期
     var _prefs = await SharedPreferences.getInstance();
     String _saveUser = _prefs.getString('user_data');
     if(_saveUser!=null){
-      Map _newUser = await UserFun?.tokenLogin(json.decode(_saveUser)['usertoken']);
+      Map _newUser = await UserFun?.tokenLogin(json.decode(_saveUser)['usertoken'],other:other);
       if (_newUser['user'] != null) {
         _user = _newUser['user'];
         notifyListeners();
@@ -28,11 +28,11 @@ class AuthModel extends ChangeNotifier{
   Future<String> login({
     @required String username,
     @required String password,
+    Map other
   }) async {
     String _username = username;
     String _password = password;
-
-    Map _newUser = await UserFun?.userLogin(_username,_password);
+    Map _newUser = await UserFun?.userLogin(_username,_password,other: other);
     if (_newUser['user'] != null) {
       _user = _newUser['user'];
       notifyListeners();

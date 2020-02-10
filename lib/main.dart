@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:accompany/page/common/login.dart';
 import 'page/home/home_index.dart';
-import 'dart:io';
+import 'package:location/location.dart';
+import 'package:simple_permissions/simple_permissions.dart';
+import 'package:toast/toast.dart';
 void main(){
   runApp(MyApp());
 }
@@ -17,13 +19,41 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   final AuthModel _auth = AuthModel();
 
+  LocationData currentLocation;
+  var location = new Location();
+  Future<bool> _checkPersmission() async {
+    bool hasPermission =
+    await SimplePermissions.checkPermission(Permission.WhenInUseLocation);
+    if (!hasPermission) {
+      PermissionStatus requestPermissionResult =
+      await SimplePermissions.requestPermission(
+          Permission.WhenInUseLocation);
+      if (requestPermissionResult != PermissionStatus.authorized) {
+        Toast.show("申请定位权限失败", context);
+        return false;
+      }
+    }
+    LocationData _data = await location.getLocation();
+    setState(() {
+      currentLocation = _data;
+    });
+    return true;
+  }
+
   @override
   void initState() {
-    try {
-      _auth.loadLogged();
-    } catch (e) {
-      print("Error Loading Settings: $e");
-    }
+    Future<bool> _getLoc = _checkPersmission();
+    _getLoc.then((e){
+      try {
+        if(e){
+          _auth.loadLogged(other: {'latitude':currentLocation.latitude.toString(),'longitude':currentLocation.longitude.toString()});
+        } else{
+          _auth.loadLogged();
+        }
+      } catch (e) {
+        print("Error Loading Settings: $e");
+      }
+    });
     super.initState();
   }
 

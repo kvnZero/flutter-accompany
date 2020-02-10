@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
-import 'package:simple_permissions/simple_permissions.dart';
-import 'package:toast/toast.dart';
+import 'package:accompany/data/models/auth.dart';
+import 'package:provider/provider.dart';
 
 class HomeIndex extends StatefulWidget {
   @override
@@ -9,29 +8,7 @@ class HomeIndex extends StatefulWidget {
 }
 
 class _HomeIndexState extends State<HomeIndex>{
-  LocationData currentLocation;
 
-  var location = new Location();
-
-  void _checkPersmission() async {
-    bool hasPermission =
-    await SimplePermissions.checkPermission(Permission.WhenInUseLocation);
-    if (!hasPermission) {
-      PermissionStatus requestPermissionResult =
-      await SimplePermissions.requestPermission(
-          Permission.WhenInUseLocation);
-      if (requestPermissionResult != PermissionStatus.authorized) {
-        Toast.show("申请定位权限失败", context);
-        return;
-      }
-    }
-    Future<LocationData> _data = location.getLocation();
-    _data.then((e){
-      setState(() {
-        currentLocation = e;
-      });
-    });
-  }
   @override
   void initState() {
     super.initState();
@@ -44,34 +21,20 @@ class _HomeIndexState extends State<HomeIndex>{
 
   @override
   Widget build(BuildContext context) {
-    if(currentLocation==null){
-      return Scaffold(
-          body: Container(
-            margin: EdgeInsets.only(top:100),
-            child: Center(
-              child: Column(children: <Widget>[
-                Text("定位中..."),
-                RaisedButton(onPressed: (){_checkPersmission();})
-              ],),
-            ),
-          )
-      );
-    }else{
-      String text;
-      print(currentLocation.latitude);
-      print(currentLocation.longitude);
-      return Scaffold(
+    return Scaffold(
         body: Container(
           margin: EdgeInsets.only(top:100),
           child: Center(
-            child: Column(children: <Widget>[
-              Text(currentLocation.latitude.toString()),
-              Text(currentLocation.longitude.toString()),
-              RaisedButton(onPressed: (){_checkPersmission();})
-            ],),
+            child: Consumer<AuthModel>(
+              builder: (context, user, child) {
+                return Column(children: <Widget>[
+                  Text(user.user.latitude),
+                  Text(user.user.longitude),
+                  RaisedButton(onPressed: (){user.logout();})
+                ],);
+              }),
           ),
         )
-      );
-    }
+    );
   }
 }

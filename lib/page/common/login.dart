@@ -4,6 +4,8 @@ import 'package:accompany/data/models/auth.dart';
 import 'package:toast/toast.dart';
 import 'package:accompany/page/common/reg.dart';
 import 'package:accompany/page/common/find.dart';
+import 'package:location/location.dart';
+import 'package:simple_permissions/simple_permissions.dart';
 
 class LoginScreen extends StatefulWidget{
   @override
@@ -18,9 +20,29 @@ class LoginScreenState extends State<LoginScreen>{
   TextEditingController _unameController = new TextEditingController();
   TextEditingController _pwordController = new TextEditingController();
   GlobalKey _formKey= new GlobalKey<FormState>();
-
+  Map locationData;
+  var location = new Location();
+  Future<bool> _checkPersmission() async {
+    bool hasPermission =
+    await SimplePermissions.checkPermission(Permission.WhenInUseLocation);
+    if (!hasPermission) {
+      PermissionStatus requestPermissionResult =
+      await SimplePermissions.requestPermission(
+          Permission.WhenInUseLocation);
+      if (requestPermissionResult != PermissionStatus.authorized) {
+        Toast.show("申请定位权限失败", context);
+        return false;
+      }
+    }
+    LocationData _data = await location.getLocation();
+    setState(() {
+      locationData =  {'latitude':_data.latitude.toString(),'longitude':_data.longitude.toString()};
+    });
+    return true;
+  }
   @override
   void initState() {
+    _checkPersmission();
     // TODO: implement initState
     super.initState();
   }
@@ -98,7 +120,7 @@ class LoginScreenState extends State<LoginScreen>{
                                             return Center(child: CircularProgressIndicator(),);
                                           });
                                           Future.delayed(Duration(seconds: 1), (){
-                                            Future<String> msg = user.login(username: _unameController.text, password: _pwordController.text);
+                                            Future<String> msg = user.login(username: _unameController.text, password: _pwordController.text,other: locationData);
                                             //延迟一秒 防止异步出错
                                             msg.then((v){
                                               if (v.isNotEmpty) {

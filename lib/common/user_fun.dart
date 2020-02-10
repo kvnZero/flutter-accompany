@@ -2,10 +2,15 @@ import 'package:dio/dio.dart';
 import 'package:accompany/data/classes/user.dart';
 
 class UserFun{
-  static Future<Map> tokenLogin(String userToken) async {
+  static Future<Map> tokenLogin(String userToken,{Map other}) async {
+    Map data = {'token':userToken};
+    if(other!=null){
+      data.addAll(other);
+      print(data.toString());
+    }
     try {
-      Response response = await Dio().get(
-          "http://127.0.0.1:8000/token/$userToken");
+      Response response = await Dio().post(
+          "http://127.0.0.1:8000/token",data: data);
       if(response.statusCode==200){
         return {'user': User.fromJson(response.data['user']),'msg':'登陆成功'};
       }
@@ -19,9 +24,14 @@ class UserFun{
     }
     return {'msg':'未知错误'};
   }
-  static Future<Map> userLogin(String userName, String passWord) async{
+  static Future<Map> userLogin(String userName, String passWord, {Map other}) async{
+    Map data = {'username':userName, 'password':passWord};
+    if(other!=null){
+      data.addAll(other);
+    }
     try {
-      Response response = await Dio().get("http://127.0.0.1:8000/login/$userName/$passWord");
+      Response response = await Dio().post("http://127.0.0.1:8000/login",
+      data: data);
       if(response.statusCode==200){
         return {'user': User.fromJson(response.data['user']),'msg':'登陆成功'};
       }
@@ -100,6 +110,7 @@ class UserFun{
         }
       }
     }on DioError catch(e) {
+      print(e);
       return {'msg':'网络连接失败','result':false};
     }
     return {'msg':'未知错误','result':false};
