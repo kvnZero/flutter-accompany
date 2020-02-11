@@ -5,7 +5,6 @@ import 'package:toast/toast.dart';
 import 'package:accompany/page/common/reg.dart';
 import 'package:accompany/page/common/find.dart';
 import 'package:location/location.dart';
-import 'package:simple_permissions/simple_permissions.dart';
 
 class LoginScreen extends StatefulWidget{
   @override
@@ -23,13 +22,17 @@ class LoginScreenState extends State<LoginScreen>{
   Map locationData;
   var location = new Location();
   Future<bool> _checkPersmission() async {
-    bool hasPermission =
-    await SimplePermissions.checkPermission(Permission.WhenInUseLocation);
+    bool hasPermission = await location.hasPermission();
+//    await SimplePermissions.checkPermission(Permission.WhenInUseLocation);
     if (!hasPermission) {
-      PermissionStatus requestPermissionResult =
-      await SimplePermissions.requestPermission(
-          Permission.WhenInUseLocation);
-      if (requestPermissionResult != PermissionStatus.authorized) {
+
+      bool requestPermission =  await location.requestPermission();
+
+//      PermissionStatus requestPermissionResult =
+//      await SimplePermissions.requestPermission(
+//          Permission.WhenInUseLocation);
+//      if (requestPermissionResult != PermissionStatus.authorized) {
+      if(requestPermission==false){
         Toast.show("申请定位权限失败", context);
         return false;
       }
@@ -51,6 +54,7 @@ class LoginScreenState extends State<LoginScreen>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[

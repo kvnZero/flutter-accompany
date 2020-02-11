@@ -8,11 +8,14 @@ class GroupIndex extends StatefulWidget {
   _GroupIndexState createState() => _GroupIndexState();
 }
 
-class _GroupIndexState extends State<GroupIndex>  with SingleTickerProviderStateMixin{
-  
+class _GroupIndexState extends State<GroupIndex>  with SingleTickerProviderStateMixin,AutomaticKeepAliveClientMixin{
+
   TabController _tabController;
   List tabs = ["推荐","关注","最新","安利","排雷"];
   Map<int,List> dynamicData = {}; //存储每个不同分类的动态数据
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -78,7 +81,7 @@ class _GroupIndexState extends State<GroupIndex>  with SingleTickerProviderState
 
   Future getPost({int index=0, int page=1,int size=10}) async{
     //这里加载新闻列表信息
-    Future<Response> response = Dio().post("http://127.0.0.1:8000/getlist/$index",);
+    Future<Response> response = Dio().post("http://192.168.1.5:8000/getlist/$index",);
     response.then((value){
       setState(() {
         if(dynamicData[index].length==0 && page==1){

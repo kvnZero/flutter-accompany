@@ -10,7 +10,7 @@ class UserFun{
     }
     try {
       Response response = await Dio().post(
-          "http://127.0.0.1:8000/token",data: data);
+          "http://192.168.1.5:8000/token",data: data);
       if(response.statusCode==200){
         return {'user': User.fromJson(response.data['user']),'msg':'登陆成功'};
       }
@@ -33,7 +33,7 @@ class UserFun{
       data.addAll(other);
     }
     try {
-      Response response = await Dio().post("http://127.0.0.1:8000/login",
+      Response response = await Dio().post("http://192.168.1.5:8000/login",
       data: data);
       if(response.statusCode==200){
         return {'user': User.fromJson(response.data['user']),'msg':'登陆成功'};
@@ -53,7 +53,7 @@ class UserFun{
   }
   static Future<Map> sendcode(String phone) async{
     try {
-      Response response = await Dio().get("http://127.0.0.1:8000/code/$phone");
+      Response response = await Dio().get("http://192.168.1.5:8000/code/$phone");
       print(response.data);
       if(response.statusCode==200){
         return {'msg':'发送成功'};
@@ -66,7 +66,7 @@ class UserFun{
   }
   static Future<bool> check(String phone) async{
     try {
-      Response response = await Dio().get("http://127.0.0.1:8000/check/$phone");
+      Response response = await Dio().get("http://192.168.1.5:8000/check/$phone");
       print(response.data);
       if(response.statusCode==200){
         return response.data['exist'];
@@ -80,7 +80,7 @@ class UserFun{
   }
   static Future<Map> reg(String phone,String password, String code) async{
     try {
-      Response response = await Dio().post("http://127.0.0.1:8000/reg",
+      Response response = await Dio().post("http://192.168.1.5:8000/reg",
           data: {'username':phone.trim(), 'password': password, 'code':code.trim()}
           );
       if(response.statusCode==200){
@@ -105,7 +105,7 @@ class UserFun{
   }
   static Future<Map> find(String phone,String password, String code) async{
     try {
-      Response response = await Dio().post("http://127.0.0.1:8000/find",
+      Response response = await Dio().post("http://192.168.1.5:8000/find",
           data: {'username':phone.trim(), 'password': password, 'code':code.trim()}
       );
       if(response.statusCode==200){

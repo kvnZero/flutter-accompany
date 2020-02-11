@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:accompany/page/common/login.dart';
 import 'package:location/location.dart';
-import 'package:simple_permissions/simple_permissions.dart';
 import 'package:toast/toast.dart';
 import 'page/index.dart';
 
@@ -23,13 +22,17 @@ class _MyAppState extends State<MyApp> {
   LocationData currentLocation;
   var location = new Location();
   Future<bool> _checkPersmission() async {
-    bool hasPermission =
-    await SimplePermissions.checkPermission(Permission.WhenInUseLocation);
+    bool hasPermission = await location.hasPermission();
+//    await SimplePermissions.checkPermission(Permission.WhenInUseLocation);
     if (!hasPermission) {
-      PermissionStatus requestPermissionResult =
-      await SimplePermissions.requestPermission(
-          Permission.WhenInUseLocation);
-      if (requestPermissionResult != PermissionStatus.authorized) {
+
+      bool requestPermission =  await location.requestPermission();
+
+//      PermissionStatus requestPermissionResult =
+//      await SimplePermissions.requestPermission(
+//          Permission.WhenInUseLocation);
+//      if (requestPermissionResult != PermissionStatus.authorized) {
+      if(requestPermission==false){
         Toast.show("申请定位权限失败", context);
         return false;
       }
