@@ -15,6 +15,9 @@ class UserFun{
         return {'user': User.fromJson(response.data['user']),'msg':'登陆成功'};
       }
     }on DioError catch(e) {
+      if(e.response.hashCode==2011){
+        return {'msg':'无法连接到服务器'};
+      }
       if(e.response.statusCode==401){
         return {'msg':'登陆状态过期, 请重新登陆'};
       }else if(e.response.statusCode==404){
@@ -36,6 +39,9 @@ class UserFun{
         return {'user': User.fromJson(response.data['user']),'msg':'登陆成功'};
       }
     }on DioError catch(e) {
+      if(e.response.hashCode==2011){
+        return {'msg':'无法连接到服务器'};
+      }
       if(e.response.statusCode==400){
         return {'msg':'密码错误,请重新尝试'};
       }else if(e.response.statusCode==404){
@@ -66,7 +72,9 @@ class UserFun{
         return response.data['exist'];
       }
     }on DioError catch(e) {
-      print(e);
+      if(e.response.hashCode==2011){
+        return false;
+      }
     }
     return false;
   }
@@ -85,7 +93,9 @@ class UserFun{
         }
       }
     }on DioError catch(e) {
-      print(e);
+      if(e.response.hashCode==2011){
+        return {'msg':'无法连接到服务器'};
+      }
       if(e.response.statusCode==400){
         return {'msg':'手机号码已经被注册'};
       }
