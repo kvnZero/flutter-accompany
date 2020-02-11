@@ -373,6 +373,13 @@ packages:
       url: "https://mirrors.cloud.tencent.com/dart-pub"
     source: hosted
     version: "2.4.0"
+  photo_view:
+    dependency: "direct main"
+    description:
+      name: photo_view
+      url: "https://mirrors.cloud.tencent.com/dart-pub"
+    source: hosted
+    version: "0.9.1"
   platform:
     dependency: transitive
     description:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home/home_index.dart';
+import 'group/group_index.dart';
 class Index extends StatefulWidget {
   @override
   _IndexState createState() => _IndexState();
@@ -12,7 +13,7 @@ class _IndexState extends State<Index> {
 
   List<Widget> pageView = [
     HomeIndex(),
-    HomeIndex(),
+    GroupIndex(),
     HomeIndex(),
     HomeIndex(),
   ];
