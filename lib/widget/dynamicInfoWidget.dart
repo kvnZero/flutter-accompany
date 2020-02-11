@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:accompany/data/classes/post.dart';
 import 'package:accompany/widget/imageShow.dart';
+import 'package:video_player/video_player.dart';
 
 class DynamicInfo extends StatelessWidget {
   const DynamicInfo({
@@ -9,6 +10,7 @@ class DynamicInfo extends StatelessWidget {
   });
   final Map post;
   final BuildContext context;
+
   @override
   Widget build(BuildContext context) {
     Post _post = Post.fromJson(post);
@@ -74,6 +76,46 @@ class DynamicInfo extends StatelessWidget {
               itemCount: _post.dynamicImages.length,
             ),
           ));
+        }
+        body = Column(
+            children: child
+        );
+      }
+      break;
+      case 2:{
+        bool done = false;
+        VideoPlayerController _controller;
+        _controller = VideoPlayerController.network(
+            _post.dynamicVideo[0].url)..initialize().then((_){});
+        _controller.setLooping(true);
+        List<Widget> child =[];
+        if (_post.dynamicContent != null) {
+          if(_post.dynamicContent.isNotEmpty){
+            child.add(Container(
+              margin: EdgeInsets.only(bottom: 10),
+              width: MediaQuery.of(context).size.width-20,
+              child: Text(_post.dynamicContent,textAlign: TextAlign.left,style: TextStyle(fontSize: 14,fontWeight: FontWeight.w300),),
+            ));
+          }
+        }
+        if(_post.dynamicVideo.length > 0){
+          child.add(Container(
+            width: MediaQuery.of(context).size.width-20,
+            margin: EdgeInsets.only(bottom: 10),
+            child: FlatButton(
+              padding: EdgeInsets.zero,
+              onPressed: (){
+                _controller.value.isPlaying
+                    ? _controller.pause()
+                    : _controller.play();
+              },
+              child:AspectRatio(
+                aspectRatio:16/9,
+                child: VideoPlayer(_controller),
+              ),
+            )
+            ),
+          );
         }
         body = Column(
             children: child
