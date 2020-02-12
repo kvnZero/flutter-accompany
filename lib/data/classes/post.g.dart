@@ -76,10 +76,12 @@ User _$UserFromJson(Map<String, dynamic> json) {
   return User(
     json['id'] as int,
     json['nickname'] as String,
+    json['avater'] as String,
   );
 }
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'id': instance.id,
       'nickname': instance.nickname,
+      'avater': instance.avater,
     };

@@ -18,6 +18,9 @@ class User extends Object {
   @JsonKey(name: 'nickname')
   String nickname;
 
+  @JsonKey(name: 'avater')
+  String avater;
+
   @JsonKey(name: 'latitude')
   String latitude;
 
@@ -30,7 +33,7 @@ class User extends Object {
   @JsonKey(name: 'update_time')
   String updateTime;
 
-  User(this.id,this.username,this.usertoken,this.nickname,this.latitude,this.longitude,this.createTime,this.updateTime,);
+  User(this.id,this.username,this.usertoken,this.nickname,this.avater,this.latitude,this.longitude,this.createTime,this.updateTime,);
 
   factory User.fromJson(Map<String, dynamic> srcJson) => _$UserFromJson(srcJson);
 

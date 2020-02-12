@@ -153,7 +153,7 @@ class _DynamicInfoState extends State<DynamicInfo> {
                     children: <Widget>[
                       ClipRRect( //剪裁为圆角矩形
                         borderRadius: BorderRadius.circular(10.0),
-                        child: Image.network('https://i03piccdn.sogoucdn.com/c54eb831b18dcd70',fit: BoxFit.fill,),
+                        child: Image.network(_post.user.avater,fit: BoxFit.fill,),
                       ),
 //                    Container(
 //                        width: 40,
@@ -190,8 +190,12 @@ class _DynamicInfoState extends State<DynamicInfo> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Container(
-                      width: 42,
-                      child: FlatButton(child: Text('生活圈',style: TextStyle(fontWeight: FontWeight.w100,fontSize: 12),),textTheme: ButtonTextTheme.primary,padding: EdgeInsets.zero,onPressed: (){},),
+                      child: FlatButton(
+                        child: Text('#很长再长#',style: TextStyle(fontWeight: FontWeight.w300,fontSize: 12,color: Colors.white),),
+                        color: Colors.blue[400],
+//                        textTheme: ButtonTextTheme.accent,
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        onPressed: (){},),
                     ),
                     Row(
                       children: <Widget>[

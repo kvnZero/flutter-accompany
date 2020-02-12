@@ -66,7 +66,7 @@ class _GroupIndexState extends State<GroupIndex>  with SingleTickerProviderState
     if(dynamicData[i].length==0){
       //数据为空 请求读取数据 返回转圈圈 考虑到一次性加载五页内容 则先加载本地数据然后顶部提醒加载
       return Center(
-        child: CircularProgressIndicator(),
+        child: Padding(padding: EdgeInsets.only(top: 20),child: CircularProgressIndicator(),)
       );
     }
     //有数据 直接展示数据
