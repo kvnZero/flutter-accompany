@@ -5,8 +5,16 @@ import 'package:accompany/page/common/login.dart';
 import 'package:location/location.dart';
 import 'package:toast/toast.dart';
 import 'page/index.dart';
+import 'dart:io';
+import 'package:flutter/services.dart';
 
 void main(){
+  if (Platform.isAndroid) {
+    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,  //设置为透明
+    );
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  }
   runApp(MyApp());
 }
 
@@ -46,6 +54,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    super.initState();
     bool islogin = false;
     Future<bool> _getLoc = _checkPersmission();
     _getLoc.then((e){
@@ -63,7 +72,6 @@ class _MyAppState extends State<MyApp> {
         _auth.loadLogged();
       }
     });
-    super.initState();
   }
 
   @override
@@ -112,7 +120,7 @@ class _SalashPageState extends State<SalashPage> {
     countDown();
   }
 
-  void countDown() {
+  void countDown() async{
     //设置倒计时三秒后执行跳转方法
     var duration = new Duration(seconds: 3);
     new Future.delayed(duration, goToHomePage);
