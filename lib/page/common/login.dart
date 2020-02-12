@@ -75,7 +75,6 @@ class LoginScreenState extends State<LoginScreen>{
                             Container(
                               width: MediaQuery.of(context).size.width/1.3,
                               child: TextFormField(
-                                autofocus: true,
                                 controller: _unameController,
                                 cursorColor: Colors.blue,
                                 decoration: InputDecoration(
@@ -123,8 +122,9 @@ class LoginScreenState extends State<LoginScreen>{
                                             _dialogC = context;
                                             return Center(child: CircularProgressIndicator(),);
                                           });
+                                          Future<String> msg = user.login(username: _unameController.text, password: _pwordController.text,other: locationData);
                                           Future.delayed(Duration(seconds: 1), (){
-                                            Future<String> msg = user.login(username: _unameController.text, password: _pwordController.text,other: locationData);
+                                            print(locationData);
                                             //延迟一秒 防止异步出错
                                             msg.then((v){
                                               if (v.isNotEmpty) {

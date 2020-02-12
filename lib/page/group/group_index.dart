@@ -72,7 +72,7 @@ class _GroupIndexState extends State<GroupIndex>  with SingleTickerProviderState
     //有数据 直接展示数据
     List<DynamicInfo> _list =[];
     dynamicData[i].forEach((value){
-      _list.add(DynamicInfo(post: value,context: context,));
+      _list.add(DynamicInfo(post: value,));
     });
     return Column(
       children: _list.map((e)=>e).toList(),

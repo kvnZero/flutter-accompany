@@ -10,7 +10,11 @@ class HomeIndex extends StatefulWidget {
   _HomeIndexState createState() => _HomeIndexState();
 }
 
-class _HomeIndexState extends State<HomeIndex>{
+class _HomeIndexState extends State<HomeIndex> with AutomaticKeepAliveClientMixin{
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {

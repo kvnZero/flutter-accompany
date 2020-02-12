@@ -46,16 +46,21 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    bool islogin = false;
     Future<bool> _getLoc = _checkPersmission();
     _getLoc.then((e){
-      try {
-        if(e){
-          _auth.loadLogged(other: {'latitude':currentLocation.latitude.toString(),'longitude':currentLocation.longitude.toString()});
-        } else{
-          _auth.loadLogged();
-        }
-      } catch (e) {
-        print("Error Loading Settings: $e");
+      if(islogin==false) {
+        islogin=true;
+        _auth.loadLogged(other: {
+          'latitude': currentLocation.latitude.toString(),
+          'longitude': currentLocation.longitude.toString()
+        });
+      }
+    });
+    Future.delayed(Duration(seconds: 1), (){
+      if(islogin==false){
+        islogin = true;
+        _auth.loadLogged();
       }
     });
     super.initState();
