@@ -1,7 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:accompany/data/classes/message_list.dart';
-
+import 'package:accompany/page/message/message_page.dart';
 class MsgWidget extends StatelessWidget {
   const MsgWidget({
     @required this.message
@@ -14,7 +14,9 @@ class MsgWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     MessageList ml = MessageList.fromJson(message);
 
-    return Container(
+    return FlatButton(onPressed: (){
+      Navigator.push(context,
+        MaterialPageRoute(builder: (context) => MessagePage()));}, child: Container(
       padding: EdgeInsets.all(10),
       decoration: new BoxDecoration(
         border: new Border(bottom: BorderSide(
@@ -35,12 +37,12 @@ class MsgWidget extends StatelessWidget {
               Badge(
                 position:BadgePosition(right: -5,top: -5),
                 child:Container(
-                    height: 40,
-                    child: ClipRRect( //剪裁为圆角矩形
+                  height: 40,
+                  child: ClipRRect( //剪裁为圆角矩形
                     borderRadius: BorderRadius.circular(10.0),
                     child: Image.network(ml.user.avater,fit: BoxFit.fill,),
-                    ),
                   ),
+                ),
               ),
               Container(
                 height: 40,
@@ -77,6 +79,6 @@ class MsgWidget extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ),padding: EdgeInsets.zero,);
   }
 }
