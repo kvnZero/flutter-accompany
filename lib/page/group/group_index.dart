@@ -11,7 +11,7 @@ class GroupIndex extends StatefulWidget {
 class _GroupIndexState extends State<GroupIndex>  with SingleTickerProviderStateMixin,AutomaticKeepAliveClientMixin{
 
   TabController _tabController;
-  List tabs = ["推荐","关注","最新","安利","排雷"];
+  List tabs = ["推荐","好友","最新","安利","排雷"];
   Map<int,List> dynamicData = {}; //存储每个不同分类的动态数据
 
   @override
@@ -37,7 +37,7 @@ class _GroupIndexState extends State<GroupIndex>  with SingleTickerProviderState
         title: Text('饲养圈',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.search), onPressed: (){print("跳转搜索");}),
-          IconButton(icon: Icon(Icons.person_add), onPressed: (){print("跳转关注");}),
+          IconButton(icon: Icon(Icons.edit), onPressed: (){print("跳转发布");}),
         ],
         bottom: TabBar(
           indicatorSize: TabBarIndicatorSize.label,
