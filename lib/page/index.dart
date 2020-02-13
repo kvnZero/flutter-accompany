@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'home/home_index.dart';
 import 'group/group_index.dart';
 import 'package:toast/toast.dart';
+import 'message/message_index.dart';
 
 class Index extends StatefulWidget {
   @override
@@ -16,7 +17,7 @@ class _IndexState extends State<Index> {
   List<Widget> pageView = [
     HomeIndex(),
     GroupIndex(),
-    HomeIndex(),
+    MessageIndex(),
     HomeIndex(),
   ];
 
