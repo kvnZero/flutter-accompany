@@ -3,6 +3,10 @@ import 'home/home_index.dart';
 import 'group/group_index.dart';
 import 'package:toast/toast.dart';
 import 'message/message_index.dart';
+import 'package:accompany/common/message_fun.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:dio/dio.dart';
 
 class Index extends StatefulWidget {
   @override
@@ -27,6 +31,24 @@ class _IndexState extends State<Index> {
     {'icon':Icons.message,'title':'消息'},
     {'icon':Icons.person,'title':'我'},
   ];
+
+  void getNewMessage() async{
+    String token;
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    String _saveUser = _prefs.getString('user_data');
+    token = json.decode(_saveUser)['usertoken'];
+    MessageFun?.getMessage(token);
+//    Future<Response> response = Dio().post("http://192.168.1.5:8000/getmessagelist/",data: {'token':token});
+//    MessageFun?.getMessage(userToken)
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    getNewMessage();
+    super.initState();
+  }
 
   @override
   void dispose() {
