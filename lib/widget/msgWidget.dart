@@ -24,6 +24,7 @@ class _MsgWidgetState extends State<MsgWidget> {
    bool done = false;
    MessageShow ml;
    int getid;
+   int myid;
    @override
   void initState() {
     // TODO: implement initState
@@ -35,7 +36,8 @@ class _MsgWidgetState extends State<MsgWidget> {
   void getUserinfo() async{
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String _saveUser = _prefs.getString('user_data');
-    getid = ml.toid==json.decode(_saveUser)['id'] ? ml.fromid : ml.toid;
+    myid=json.decode(_saveUser)['id'];
+    getid = ml.toid== myid ? ml.fromid : ml.toid;
     Map _user = await UserFun?.userInfo(getid.toString());
     if(_user != null ){
       setState(() {
@@ -51,7 +53,7 @@ class _MsgWidgetState extends State<MsgWidget> {
     return FlatButton(onPressed: (){
       ml.read=1;
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => MessagePage(toId: getid,user: user,)));}, child: Container(
+          MaterialPageRoute(builder: (context) => MessagePage(toId: getid,user: user,myId:myid)));}, child: Container(
       padding: EdgeInsets.all(10),
       decoration: new BoxDecoration(
         border: new Border(bottom: BorderSide(
@@ -88,7 +90,7 @@ class _MsgWidgetState extends State<MsgWidget> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        Container(width:  MediaQuery.of(context).size.width-120,
+                        Container(width:  MediaQuery.of(context).size.width-130,
                           child: Row(
                             children: <Widget>[
                               Text(done ? user['nickname'].toString() : '', style: TextStyle(
@@ -105,7 +107,7 @@ class _MsgWidgetState extends State<MsgWidget> {
                     ),
                     Row(
                       children: <Widget>[
-                        Container(width:  MediaQuery.of(context).size.width-70, child: Text(ml.content,overflow: TextOverflow.ellipsis,maxLines: 1,style: TextStyle(color: Colors.black54,fontSize: 14),),),
+                        Container(width:  MediaQuery.of(context).size.width-80, child: Text(ml.content,overflow: TextOverflow.ellipsis,maxLines: 1,style: TextStyle(color: Colors.black54,fontSize: 14),),),
                       ],
                     )
                   ],

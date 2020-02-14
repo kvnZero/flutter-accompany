@@ -10,21 +10,24 @@ class MessagePage extends StatefulWidget {
   const MessagePage({
     @required this.toId,
     @required this.user,
+    @required this.myId,
   });
 
   final int toId;
   final Map user;
-
+  final int myId;
   @override
-  _MessagePageState createState() => _MessagePageState(toId: toId,user: user);
+  _MessagePageState createState() => _MessagePageState(toId: toId,user: user, myId:myId);
 }
 
 class _MessagePageState extends State<MessagePage> {
   _MessagePageState({
     @required this.toId,
     @required this.user,
+    @required this.myId,
   });
   int toId;
+  int myId;
   Map user;
   IO.Socket socket;
 
@@ -52,6 +55,7 @@ class _MessagePageState extends State<MessagePage> {
       setState(() {
         msgList.add({'content':data['msg'],'sender':false});
       });
+      MessageFun?.insertMessage({'id':data['mid'],'fromid':data['fromid'],'toid':data['toid'],'content':data['msg'],'read':1,'createTime':data['time']});
       //写入本地数据库
     });
     super.initState();
@@ -125,8 +129,11 @@ class _MessagePageState extends State<MessagePage> {
                     setState(() {
                       msgList.add({'content':_text,'avaterurl':'','sender':true});
                     });
-                    socket.send([{'msg':_text,'toid':100}]);
                     jumpdown(jump: true,time: 100);
+                    Future<Map> _mp = MessageFun?.sendMessage(myId.toString(), toId.toString(), _text);
+                    _mp.then((e){
+                      socket.send([{'msg':e['content'],'fromid':e['fromid'],'mid':e['id'],'toid':e['toid'],'time':e['create_time']}]);
+                    });
                   }),
                 ]
               )

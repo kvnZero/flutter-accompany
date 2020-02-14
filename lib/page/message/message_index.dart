@@ -12,8 +12,6 @@ class MessageIndex extends StatefulWidget {
 }
 
 class _MessageIndexState extends State<MessageIndex> with AutomaticKeepAliveClientMixin {
-  TextEditingController _controller = new TextEditingController();
-//  IO.Socket socket;
   Map packet;
   List msgList = [];
 
@@ -23,21 +21,12 @@ class _MessageIndexState extends State<MessageIndex> with AutomaticKeepAliveClie
 
   @override
   void initState() {
-    //创建websocket连接
-//    socket = IO.io('ws://127.0.0.1:8001?userid=1');
-//    socket.on('connect', (_) {
-//      print(socket.id);
-//    });
-//    socket.on('event', (data) => print(data));
-//    socket.on('disconnect', (_) => print('disconnect'));
-//    socket.on('fromServer', (data) => print(data));
-//    socket.on('message', (data) => print(data));
     getList();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return new Scaffold(
       appBar: new AppBar(
         title: Text('唠个嗑',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),),
@@ -54,15 +43,6 @@ class _MessageIndexState extends State<MessageIndex> with AutomaticKeepAliveClie
       )
     );
   }
-
-//  new Padding(
-//  padding: const EdgeInsets.all(20.0),
-//  child: FlatButton(onPressed: (){
-//  print("1");
-////          socket.send([{'msg':'hello','toid':100}]);
-//  }, child: Text("1"))
-//  ),
-
   Widget showList(){
     if(msgList.length==0){
       //数据为空 请求读取数据 返回转圈圈 考虑到一次性加载五页内容 则先加载本地数据然后顶部提醒加载

@@ -45,6 +45,33 @@ class MessageFun {
     }
     return [];
   }
+  static Future<Map> sendMessage(String fromid,String toid, String content) async{
+    try {
+      Response response = await Dio().post("http://192.168.1.5:8000/sendmessage",
+          data: {'fromid':fromid, 'toid': toid, 'msg':content}
+      );
+      insertMessage(response.data);
+      return response.data;
+    }on DioError catch(e) {
+      if(e.response.hashCode==2011){
+        return {'msg':'无法连接到服务器'};
+      }
+      return {'msg':'网络连接失败'};
+    }
+  }
+  static Future<bool> insertMessage(Map message) async {
+    Database db = await DBProvider.db.database;
+    int r = await db.insert('Message', {
+      'messageid': message['id'],
+      'fromid': message['fromid'],
+      'toid': message['toid'],
+      'content': message['content'],
+      'read': message['read'],
+      'time': message['create_time'],
+    });
+    if(r>0) return true;
+    return false;
+  }
   static Future<Map> getMessage(String userToken,{int myid = 0}) async {
     Map data = {'token':userToken,'lastid': await MessageFun?.getLastMessageId()};
     try {
