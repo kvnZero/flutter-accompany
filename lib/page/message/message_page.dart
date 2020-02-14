@@ -4,6 +4,8 @@ import 'package:accompany/data/models/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:accompany/common/message_fun.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+
 class MessagePage extends StatefulWidget {
   const MessagePage({
     @required this.toId,
@@ -24,6 +26,7 @@ class _MessagePageState extends State<MessagePage> {
   });
   int toId;
   Map user;
+  IO.Socket socket;
 
   TextEditingController _textController = new TextEditingController();
   ScrollController _controller = ScrollController();
@@ -41,7 +44,16 @@ class _MessagePageState extends State<MessagePage> {
         });
       });
     });
-
+    setState(() {
+      socket = IO.io('ws://127.0.0.1:8001?userid=18');
+    });
+    socket.on('message', (data){
+      print("收到消息啦");
+      setState(() {
+        msgList.add({'content':data['msg'],'sender':false});
+      });
+      //写入本地数据库
+    });
     super.initState();
   }
   
@@ -113,6 +125,7 @@ class _MessagePageState extends State<MessagePage> {
                     setState(() {
                       msgList.add({'content':_text,'avaterurl':'','sender':true});
                     });
+                    socket.send([{'msg':_text,'toid':100}]);
                     jumpdown(jump: true,time: 100);
                   }),
                 ]

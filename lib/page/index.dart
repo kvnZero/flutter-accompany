@@ -7,6 +7,7 @@ import 'package:accompany/common/message_fun.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class Index extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class _IndexState extends State<Index> {
   int _currentIndex = 0;
   var _controller = PageController(initialPage: 0);
   DateTime _lastPressedAt;
+  IO.Socket socket;
 
   List<Widget> pageView = [
     HomeIndex(),
@@ -37,7 +39,10 @@ class _IndexState extends State<Index> {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String _saveUser = _prefs.getString('user_data');
     token = json.decode(_saveUser)['usertoken'];
-    await MessageFun?.getMessage(token,myid: json.decode(_saveUser)['id']);
+    int myid = json.decode(_saveUser)['id'];
+    await MessageFun?.getMessage(token,myid: myid);
+    socket = IO.io('ws://127.0.0.1:8001?userid=$myid');
+    socket.on('connect', (_) {});
 //    Future<Response> response = Dio().post("http://192.168.1.5:8000/getmessagelist/",data: {'token':token});
 //    MessageFun?.getMessage(userToken)
   }
@@ -45,7 +50,6 @@ class _IndexState extends State<Index> {
   @override
   void initState() {
     // TODO: implement initState
-
     getNewMessage();
     super.initState();
   }
