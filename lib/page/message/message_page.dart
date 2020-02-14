@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class MessagePage extends StatefulWidget {
@@ -10,11 +11,44 @@ class MessagePage extends StatefulWidget {
 class _MessagePageState extends State<MessagePage> {
 
   TextEditingController _textController = new TextEditingController();
+  ScrollController _controller = ScrollController();
   GlobalKey _formKey = new GlobalKey<FormState>();
+  List<Map> msgList = [
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':false},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':false},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':false},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':false},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':false},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':false},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
+    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':false},
+  ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+  
+  
+  @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+
+  jumpdown();
+
+  return new Scaffold(
       appBar: new AppBar(
         title: Text(
           '对方名称', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),),
@@ -30,23 +64,9 @@ class _MessagePageState extends State<MessagePage> {
         children: <Widget>[
           Expanded(
             child: ListView(
-                children: <Widget>[
-                  messageWidget("大家如啊啊啊说果啊啊啊啊啊啊啊啊啊啊么啊啊啊啊啊好",'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70',sender: true),
-                  messageWidget("大家如啊啊啊说果啊啊啊啊啊啊啊啊啊啊么啊啊啊啊啊好",'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70',sender: true),
-                  messageWidget("大家如啊啊啊说果啊啊啊啊啊啊啊啊啊啊么啊啊啊啊啊好",'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70',sender: true),
-                  messageWidget("大家如啊啊啊说果啊啊啊啊啊啊啊啊啊啊么啊啊啊啊啊好",'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70',sender: true),
-                  messageWidget("大家如啊啊啊说果啊啊啊啊啊啊啊啊啊啊么啊啊啊啊啊好",'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70',sender: true),
-                  messageWidget("大家如啊啊啊说果啊啊啊啊啊啊啊啊啊啊么啊啊啊啊啊好",'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70',sender: true),
-                  messageWidget("大家如啊啊啊说果啊啊啊啊啊啊啊啊啊啊么啊啊啊啊啊好",'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70',sender: true),
-                  messageWidget("大家如啊啊啊说果啊啊啊啊啊啊啊啊啊啊么啊啊啊啊啊好",'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70',sender: true),
-                  messageWidget("大家如啊啊啊说果啊啊啊啊啊啊啊啊啊啊么啊啊啊啊啊好",'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70',sender: true),
-                  messageWidget("大家如啊啊啊说果啊啊啊啊啊啊啊啊啊啊么啊啊啊啊啊好",'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70',sender: true),
-                  messageWidget("大家如啊啊啊说果啊啊啊啊啊啊啊啊啊啊么啊啊啊啊啊好",'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70',sender: true),
-                  messageWidget("大家如啊啊啊说果啊啊啊啊啊啊啊啊啊啊么啊啊啊啊啊好",'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70',sender: true),
-                  messageWidget("大家如啊啊啊说果啊啊啊啊啊啊啊啊啊啊么啊啊啊啊啊好",'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70',sender: true),
-                  messageWidget("大家如啊啊啊说果啊啊啊啊啊啊啊啊啊啊么啊啊啊啊啊好",'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70'),
-                ],
+              children: msgList.map((e)=>messageWidget(e['content'], e['avaterurl'],sender: e['sender'])).toList(),
               padding: EdgeInsets.only(top: 5,bottom: 5),
+              controller: _controller,
               ),
           ),
           Theme(
@@ -67,6 +87,7 @@ class _MessagePageState extends State<MessagePage> {
                         .width / 1.31,
                     color: Colors.white,
                     child: TextFormField(
+                      onTap: (){jumpdown(jump: true);},
                       controller: _textController,
                       cursorColor: Colors.blue,
                       decoration: InputDecoration(
@@ -90,6 +111,23 @@ class _MessagePageState extends State<MessagePage> {
     );
   }
 
+  void jumpdown({bool jump = false}) async{
+    if (jump) {
+      var duration = new Duration(milliseconds: 500);
+      new Future.delayed(duration, (){
+        _controller.jumpTo(_controller.position.maxScrollExtent);
+      });
+    }
+    if(_controller.positions.isNotEmpty){
+      _controller.jumpTo(_controller.position.maxScrollExtent);
+    }else{
+      var duration = new Duration(milliseconds: 500);
+      new Future.delayed(duration, (){
+        jumpdown();
+      });
+    }
+  }
+
   Widget messageWidget(String content, String avaterurl, {bool sender=false}) {
     Color setColor = sender ? Colors.green : Colors.white;
 
@@ -104,7 +142,7 @@ class _MessagePageState extends State<MessagePage> {
     Widget body = Container(
       width: 300,
       margin: sender ? EdgeInsets.only(right: 5) : EdgeInsets.only(left: 5),
-        child:Align(alignment: Alignment.centerLeft,
+        child: Align(alignment: sender ? Alignment.centerRight : Alignment.centerLeft,
         child:  Flex(direction: Axis.vertical,
           children: <Widget>[
             Card(
