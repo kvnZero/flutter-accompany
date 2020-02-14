@@ -1,7 +1,8 @@
 import 'dart:math';
 
-import 'package:flutter/gestures.dart';
+import 'package:accompany/data/models/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MessagePage extends StatefulWidget {
   @override
@@ -64,7 +65,7 @@ class _MessagePageState extends State<MessagePage> {
         children: <Widget>[
           Expanded(
             child: ListView(
-              children: msgList.map((e)=>messageWidget(e['content'], e['avaterurl'],sender: e['sender'])).toList(),
+              children: msgList.map((e)=>messageWidget(e['content'], avaterurl: e['avaterurl'],sender: e['sender'])).toList(),
               padding: EdgeInsets.only(top: 5,bottom: 5),
               controller: _controller,
               ),
@@ -101,7 +102,17 @@ class _MessagePageState extends State<MessagePage> {
                       style: TextStyle(fontSize: 14),
                     ),
                   ),
-                  IconButton(icon: Icon(Icons.send), onPressed: (){print("发送消息");}),
+                  IconButton(icon: Icon(Icons.send), onPressed: (){
+                    if(_textController.text.trim().length==0){
+                      return;
+                    }
+                    String _text = _textController.text.trim();
+                    _textController.clear();
+                    setState(() {
+                      msgList.add({'content':_text,'avaterurl':'','sender':true});
+                    });
+                    jumpdown(jump: true,time: 100);
+                  }),
                 ]
               )
             ),
@@ -111,9 +122,9 @@ class _MessagePageState extends State<MessagePage> {
     );
   }
 
-  void jumpdown({bool jump = false}) async{
+  void jumpdown({bool jump = false,int time:500}) async{
     if (jump) {
-      var duration = new Duration(milliseconds: 500);
+      var duration = new Duration(milliseconds: time);
       new Future.delayed(duration, (){
         _controller.jumpTo(_controller.position.maxScrollExtent);
       });
@@ -128,7 +139,7 @@ class _MessagePageState extends State<MessagePage> {
     }
   }
 
-  Widget messageWidget(String content, String avaterurl, {bool sender=false}) {
+  Widget messageWidget(String content, {String avaterurl='', bool sender=false}) {
     Color setColor = sender ? Colors.green : Colors.white;
 
     Widget avater = Container(
@@ -136,7 +147,11 @@ class _MessagePageState extends State<MessagePage> {
       width: 40,
       child: ClipRRect( //剪裁为圆角矩形
         borderRadius: BorderRadius.circular(10.0),
-        child: Image.network(avaterurl,fit: BoxFit.fill,),
+        child: sender ? Consumer<AuthModel>(
+          builder: (context, user, child) {
+            return Image.network(user.user.avater,fit: BoxFit.fill,);
+          },
+        ) : Image.network(avaterurl,fit: BoxFit.fill,)
       ),
     );
     Widget body = Container(
