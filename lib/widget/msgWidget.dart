@@ -1,22 +1,55 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:accompany/data/classes/message_list.dart';
+import 'package:accompany/data/classes/message_show.dart';
 import 'package:accompany/page/message/message_page.dart';
-class MsgWidget extends StatelessWidget {
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:accompany/common/user_fun.dart';
+class MsgWidget extends StatefulWidget {
   const MsgWidget({
-    @required this.message
+    @required this.message,
   });
 
   final Map message;
+  @override
+  _MsgWidgetState createState() => _MsgWidgetState(message: message);
+}
 
+class _MsgWidgetState extends State<MsgWidget> {
+   _MsgWidgetState({
+    @required this.message,
+  });
+   Map message;
+   Map user;
+   bool done = false;
+   MessageShow ml;
+   @override
+  void initState() {
+    // TODO: implement initState
+    ml = MessageShow.fromJson(message);
+    getUserinfo();
+    super.initState();
+  }
+
+  void getUserinfo() async{
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+    String _saveUser = _prefs.getString('user_data');
+    int getid = ml.toid==json.decode(_saveUser)['id'] ? ml.fromid : ml.toid;
+    Map _user = await UserFun?.userInfo(getid.toString());
+    if(_user != null ){
+      setState(() {
+        user = _user;
+        done=true;
+      });
+     }
+  }
 
   @override
-  Widget build(BuildContext context) {
-    MessageList ml = MessageList.fromJson(message);
+  Widget build(BuildContext context){
 
     return FlatButton(onPressed: (){
       Navigator.push(context,
-        MaterialPageRoute(builder: (context) => MessagePage()));}, child: Container(
+          MaterialPageRoute(builder: (context) => MessagePage()));}, child: Container(
       padding: EdgeInsets.all(10),
       decoration: new BoxDecoration(
         border: new Border(bottom: BorderSide(
@@ -31,7 +64,7 @@ class MsgWidget extends StatelessWidget {
                 height: 40,
                 child: ClipRRect( //剪裁为圆角矩形
                   borderRadius: BorderRadius.circular(10.0),
-                  child: Image.network(ml.user.avater,fit: BoxFit.fill,),
+                  child: done ? Image.network(user['avater'],fit: BoxFit.fill,) : Container() ,
                 ),
               ) :
               Badge(
@@ -40,7 +73,7 @@ class MsgWidget extends StatelessWidget {
                   height: 40,
                   child: ClipRRect( //剪裁为圆角矩形
                     borderRadius: BorderRadius.circular(10.0),
-                    child: Image.network(ml.user.avater,fit: BoxFit.fill,),
+                    child: done ? Image.network(user['avater'],fit: BoxFit.fill,) : Container(),
                   ),
                 ),
               ),
@@ -48,7 +81,7 @@ class MsgWidget extends StatelessWidget {
                 height: 40,
                 padding: EdgeInsets.only(left: 5),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -56,14 +89,14 @@ class MsgWidget extends StatelessWidget {
                         Container(width:  MediaQuery.of(context).size.width-120,
                           child: Row(
                             children: <Widget>[
-                              Text(ml.user.nickname, style: TextStyle(
+                              Text(done ? user['nickname'].toString() : '', style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.w400),)
                             ],
                           ),
                         ),
                         Row(
                           children: <Widget>[
-                            Text(ml.updateTime.substring(11),style: TextStyle(fontSize: 12,color: Colors.black26),)
+                            Text(ml.time.substring(11),style: TextStyle(fontSize: 12,color: Colors.black26),)
                           ],
                         )
                       ],

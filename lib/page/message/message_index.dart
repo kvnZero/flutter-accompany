@@ -4,6 +4,8 @@ import 'package:accompany/widget/msgWidget.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:accompany/common/message_fun.dart';
+
 class MessageIndex extends StatefulWidget {
   @override
   _MessageIndexState createState() => _MessageIndexState();
@@ -76,7 +78,7 @@ class _MessageIndexState extends State<MessageIndex> with AutomaticKeepAliveClie
     //有数据 直接展示数据
     List<MsgWidget> _list =[];
     msgList.forEach((value){
-      _list.add(MsgWidget(message: value,));
+      _list.add(MsgWidget(message: value));
     });
     return Column(
       children: _list.map((e)=>e).toList(),
@@ -84,16 +86,14 @@ class _MessageIndexState extends State<MessageIndex> with AutomaticKeepAliveClie
   }
 
   void getList() async{
-    String token;
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String _saveUser = _prefs.getString('user_data');
-    token = json.decode(_saveUser)['usertoken'];
-    Future<Response> response = Dio().post("http://192.168.1.5:8000/getmessagelist/",data: {'token':token});
-    response.then((value){
+    Future<List> _list =  MessageFun?.getMessageList(json.decode(_saveUser)['id']);
+    _list.then((value){
       setState(() {
-        msgList = value.data;
+        msgList = value;
       });
     });
+//    Future<Response> response = Dio().post("http://192.168.1.5:8000/getmessagelist/",data: {'token':token});
   }
-
 }

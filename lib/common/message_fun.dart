@@ -8,23 +8,39 @@ class MessageFun {
     Database db = await DBProvider.db.database;
     List<Map> maps = await db.query('Message',
         columns: [
-          'id'
-        ], orderBy: 'id desc', limit: 1);
+          'messageid'
+        ], orderBy: 'messageid desc', limit: 1);
     if (maps.length > 0) {
-      return maps.first['id'];
+      return maps.first['messageid'];
     }
     return 0;
   }
-  static Future<Map> getMessage(String userToken) async {
+  static Future<List> getMessageList(int id) async {
+    Database db = await DBProvider.db.database;
+    List queryList;
+    List<Map> maps = await db.rawQuery('''
+    SELECT * FROM `Message` WHERE  `message`.`id` IN (
+    SELECT max(nt.id) FROM (
+    SELECT id,toid as uid,content,time FROM `message` WHERE `fromid` = $id
+    UNION
+    SELECT id,fromid as uid,content,time FROM `message` WHERE `toid` = $id ORDER BY time DESC
+    ) as nt GROUP BY nt.uid
+    ) order by time desc;
+    ''',queryList);
+    print(maps);
+    if (maps.length > 0) {
+      return maps;
+    }
+    return [];
+  }
+  static Future<Map> getMessage(String userToken,{int myid = 0}) async {
     Map data = {'token':userToken,'lastid': await MessageFun?.getLastMessageId()};
     try {
       Response response = await Dio().post(
-          "http://192.168.1.5:8000/getmessagelist",data: data);
+          "http://192.168.1.5:8000/getallmessage",data: data);
       if(response.statusCode==200){
         Database db = await DBProvider.db.database;
         bool hasNew =false;
-        print(userToken);
-        print(response.data);
         response.data.forEach((value){
           MessageList _list = MessageList.fromJson(value);
           db.insert('Message', {
@@ -33,8 +49,11 @@ class MessageFun {
             'toid': _list.toid,
             'content': _list.content,
             'read': _list.read,
+            'time': _list.createTime,
           });
-          hasNew = true;
+          if(hasNew==false){
+            if(_list.toid==myid) hasNew=true;
+          }
         });
         return {'new': hasNew,'msg':'获取成功'};
       }

@@ -37,7 +37,7 @@ class _IndexState extends State<Index> {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String _saveUser = _prefs.getString('user_data');
     token = json.decode(_saveUser)['usertoken'];
-    MessageFun?.getMessage(token);
+    await MessageFun?.getMessage(token,myid: json.decode(_saveUser)['id']);
 //    Future<Response> response = Dio().post("http://192.168.1.5:8000/getmessagelist/",data: {'token':token});
 //    MessageFun?.getMessage(userToken)
   }

@@ -27,7 +27,8 @@ class DBProvider{
           "fromid INTEGER,"
           "toid INTEGER,"
           "content TEXT,"
-          "read INTEGER"
+          "read INTEGER,"
+          "time NUMERIC"
           ")");
     });
   }

@@ -125,4 +125,18 @@ class UserFun{
     }
     return {'msg':'未知错误','result':false};
   }
+  static Future<Map> userInfo(String id) async {
+    try {
+      Response response = await Dio().get("http://192.168.1.5:8000/userinfo/$id",
+      );
+      if (response.statusCode == 200) {
+        return {'avater':response.data['avater'],'nickname':response.data['nickname']};
+      }
+    } on DioError catch (e) {
+      if (e.response.statusCode == 404) {
+        return null;
+      }
+      return null;
+    }
+  }
 }
