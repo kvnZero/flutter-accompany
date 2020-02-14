@@ -3,43 +3,45 @@ import 'dart:math';
 import 'package:accompany/data/models/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:accompany/common/message_fun.dart';
 class MessagePage extends StatefulWidget {
+  const MessagePage({
+    @required this.toId,
+    @required this.user,
+  });
+
+  final int toId;
+  final Map user;
+
   @override
-  _MessagePageState createState() => _MessagePageState();
+  _MessagePageState createState() => _MessagePageState(toId: toId,user: user);
 }
 
 class _MessagePageState extends State<MessagePage> {
+  _MessagePageState({
+    @required this.toId,
+    @required this.user,
+  });
+  int toId;
+  Map user;
 
   TextEditingController _textController = new TextEditingController();
   ScrollController _controller = ScrollController();
   GlobalKey _formKey = new GlobalKey<FormState>();
-  List<Map> msgList = [
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':false},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':false},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':false},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':false},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':false},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':false},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':true},
-    {'content':'hellow','avaterurl':'https://i03piccdn.sogoucdn.com/c54eb831b18dcd70','sender':false},
-  ];
+  List<Map> msgList = [];
 
   @override
   void initState() {
     // TODO: implement initState
+    Future<List> _list =  MessageFun?.getWithMessageList(toId);
+    _list.then((e){
+      e.forEach((e){
+        setState(() {
+          msgList.add({'content':e['content'],'sender':e['uid']!=toId});
+        });
+      });
+    });
+
     super.initState();
   }
   
@@ -52,7 +54,7 @@ class _MessagePageState extends State<MessagePage> {
   return new Scaffold(
       appBar: new AppBar(
         title: Text(
-          '对方名称', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),),
+          user['nickname'].toString(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),),
         centerTitle: true,
         elevation: 0.5,
         actions: <Widget>[
@@ -65,7 +67,7 @@ class _MessagePageState extends State<MessagePage> {
         children: <Widget>[
           Expanded(
             child: ListView(
-              children: msgList.map((e)=>messageWidget(e['content'], avaterurl: e['avaterurl'],sender: e['sender'])).toList(),
+              children: msgList.map((e)=>messageWidget(e['content'], avaterurl:user['avater'],sender: e['sender'])).toList(),
               padding: EdgeInsets.only(top: 5,bottom: 5),
               controller: _controller,
               ),
@@ -139,7 +141,7 @@ class _MessagePageState extends State<MessagePage> {
     }
   }
 
-  Widget messageWidget(String content, {String avaterurl='', bool sender=false}) {
+  Widget messageWidget(String content, {String avaterurl= '',bool sender=false}) {
     Color setColor = sender ? Colors.green : Colors.white;
 
     Widget avater = Container(

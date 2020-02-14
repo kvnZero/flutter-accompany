@@ -23,6 +23,7 @@ class _MsgWidgetState extends State<MsgWidget> {
    Map user;
    bool done = false;
    MessageShow ml;
+   int getid;
    @override
   void initState() {
     // TODO: implement initState
@@ -34,7 +35,7 @@ class _MsgWidgetState extends State<MsgWidget> {
   void getUserinfo() async{
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String _saveUser = _prefs.getString('user_data');
-    int getid = ml.toid==json.decode(_saveUser)['id'] ? ml.fromid : ml.toid;
+    getid = ml.toid==json.decode(_saveUser)['id'] ? ml.fromid : ml.toid;
     Map _user = await UserFun?.userInfo(getid.toString());
     if(_user != null ){
       setState(() {
@@ -48,8 +49,9 @@ class _MsgWidgetState extends State<MsgWidget> {
   Widget build(BuildContext context){
 
     return FlatButton(onPressed: (){
+      ml.read=1;
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => MessagePage()));}, child: Container(
+          MaterialPageRoute(builder: (context) => MessagePage(toId: getid,user: user,)));}, child: Container(
       padding: EdgeInsets.all(10),
       decoration: new BoxDecoration(
         border: new Border(bottom: BorderSide(
@@ -60,7 +62,7 @@ class _MsgWidgetState extends State<MsgWidget> {
           Row(
             children: <Widget>[
 //              redB,
-              ml.read == 0 ? Container(
+              ml.read == 1 ? Container(
                 height: 40,
                 child: ClipRRect( //剪裁为圆角矩形
                   borderRadius: BorderRadius.circular(10.0),

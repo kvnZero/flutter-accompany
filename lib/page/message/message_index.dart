@@ -36,13 +36,8 @@ class _MessageIndexState extends State<MessageIndex> with AutomaticKeepAliveClie
   }
 
   @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+
     return new Scaffold(
       appBar: new AppBar(
         title: Text('唠个嗑',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w400),),

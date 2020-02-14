@@ -27,7 +27,19 @@ class MessageFun {
     ) as nt GROUP BY nt.uid
     ) order by time desc;
     ''',queryList);
-    print(maps);
+    if (maps.length > 0) {
+      return maps;
+    }
+    return [];
+  }
+  static Future<List> getWithMessageList(int id) async {
+    Database db = await DBProvider.db.database;
+    int r = await db.update('message',{'read':1},where:'read=0 and toid=$id');
+    List<Map> maps = await db.rawQuery('''
+    SELECT fromid as uid,content,time FROM `message` WHERE `fromid` = $id
+    UNION
+    SELECT fromid as uid,content,time FROM `message` WHERE `toid` = $id ORDER BY time asc
+    ''');
     if (maps.length > 0) {
       return maps;
     }
