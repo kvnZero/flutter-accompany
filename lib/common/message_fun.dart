@@ -34,7 +34,7 @@ class MessageFun {
   }
   static Future<List> getWithMessageList(int id) async {
     Database db = await DBProvider.db.database;
-    int r = await db.update('message',{'read':1},where:'read=0 and toid=$id');
+    await db.update('message',{'read':1},where:'read=0 and toid=$id');
     List<Map> maps = await db.rawQuery('''
     SELECT fromid as uid,content,time FROM `message` WHERE `fromid` = $id
     UNION

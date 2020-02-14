@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:accompany/data/classes/post.dart';
 import 'package:accompany/widget/dynamicInfoWidget.dart';
 
 class GroupIndex extends StatefulWidget {

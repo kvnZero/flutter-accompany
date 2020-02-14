@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:accompany/widget/msgWidget.dart';
-import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:accompany/common/message_fun.dart';

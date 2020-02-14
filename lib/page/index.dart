@@ -6,7 +6,6 @@ import 'message/message_index.dart';
 import 'package:accompany/common/message_fun.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-import 'package:dio/dio.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class Index extends StatefulWidget {

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:accompany/data/models/auth.dart';
-import 'package:provider/provider.dart';
 import 'package:accompany/widget/myIconButton.dart';
 import 'package:accompany/widget/goodsInfoWidget.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
