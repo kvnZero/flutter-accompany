@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
-
-class MyIndex extends StatefulWidget{
+import 'package:accompany/data/models/auth.dart';
+import 'package:provider/provider.dart';class MyIndex extends StatefulWidget{
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -42,35 +42,38 @@ class MyIndexState extends State<MyIndex> with SingleTickerProviderStateMixin{
       child:Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                height: 60,
-                width: 60,
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.network('https://i03piccdn.sogoucdn.com/c54eb831b18dcd70',fit: BoxFit.fill,)
-                ),
-              ),
-              Padding(padding: EdgeInsets.only(left: 10),
-                  child: Container(
-                    width: 200,
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          width:200,
-                          child: Row(
-                            children: <Widget>[
-                              Text("白痴少年要打游戏", style: TextStyle(fontSize: 16),),
-                              Padding(padding: EdgeInsets.only(left:5),child: Text ('🚺'),)
-                            ],
-                          ),
-                        ),
-                      ],
+          Consumer<AuthModel>(
+            builder: (context, user, child) {
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    height: 60,
+                    width: 60,
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.network(user.user.avater,fit: BoxFit.fill,)
                     ),
-                  ))
-            ],
+                  ),
+                  Padding(padding: EdgeInsets.only(left: 10),
+                      child: Container(
+                        width: 200,
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              width:200,
+                              child: Row(
+                                children: <Widget>[
+                                  Text(user.user.nickname, style: TextStyle(fontSize: 16),),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ))
+                ],
+              );
+            },
           ),
           FlatButton(
             padding: EdgeInsets.zero,
@@ -90,7 +93,7 @@ class MyIndexState extends State<MyIndex> with SingleTickerProviderStateMixin{
     return Container(
       margin: EdgeInsets.only(top:10,bottom: 10),
       color: Colors.white,
-      height:90,
+      height:80,
       child: Column(
         children: <Widget>[
           userinfo,
@@ -123,7 +126,8 @@ class MyIndexState extends State<MyIndex> with SingleTickerProviderStateMixin{
           child: ListView(
             children: <Widget>[
               userInfo(),
-              Container(child: createList(),)
+              Container(child: createList(),),
+              logoutButton()
 //            createList(),
             ],
           ),
@@ -177,5 +181,38 @@ class MyIndexState extends State<MyIndex> with SingleTickerProviderStateMixin{
           ),
         )
     );
+  }
+
+  Widget logoutButton(){
+      return FlatButton(onPressed: (){
+        showDialog(context: context,barrierDismissible: false,
+        builder: (BuildContext context){
+          return  Consumer<AuthModel>(
+            builder: (context, user, child) {
+              return AlertDialog(title: Center(child: Text("确定要退出账户",style: TextStyle(fontSize: 16,fontWeight: FontWeight.w300),),),actions: <Widget>[
+                FlatButton(onPressed: (){
+                  print("确认退出");
+                  user.logout();
+                  Navigator.of(context).pop();
+                }, child: Text("确定退出")),
+                FlatButton(onPressed: (){
+                  Navigator.of(context).pop();
+                }, child: Text("取消退出",style: TextStyle(color: Colors.black38),)),
+              ],);
+            });
+        });
+      },
+        padding: EdgeInsets.zero,
+        child: Container(
+          padding: EdgeInsets.all(10),
+          decoration: new BoxDecoration(
+            border: new Border(bottom: BorderSide(width: 0.3,color: Colors.black12, style: BorderStyle.solid)),
+            color: Colors.white
+          ),
+          child: Center(
+            child:Text("退出账户",style: TextStyle(fontSize: 14,color: Colors.red[300]),),
+          )
+        )
+      );
   }
 }
