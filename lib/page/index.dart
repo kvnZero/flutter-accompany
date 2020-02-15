@@ -7,6 +7,7 @@ import 'package:accompany/common/message_fun.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:accompany/page/my/my_index.dart';
 
 class Index extends StatefulWidget {
   @override
@@ -23,7 +24,7 @@ class _IndexState extends State<Index> {
     HomeIndex(),
     GroupIndex(),
     MessageIndex(),
-    HomeIndex(),
+    MyIndex(),
   ];
 
   List navItem = [
