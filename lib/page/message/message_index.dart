@@ -12,6 +12,7 @@ class MessageIndex extends StatefulWidget {
 class _MessageIndexState extends State<MessageIndex> with AutomaticKeepAliveClientMixin {
   Map packet;
   List msgList = [];
+  bool zeroMsg = false;
 
   @override
   // TODO: implement wantKeepAlive
@@ -44,9 +45,15 @@ class _MessageIndexState extends State<MessageIndex> with AutomaticKeepAliveClie
   Widget showList(){
     if(msgList.length==0){
       //数据为空 请求读取数据 返回转圈圈 考虑到一次性加载五页内容 则先加载本地数据然后顶部提醒加载
-      return Center(
-          child: Padding(padding: EdgeInsets.only(top: 20),child: CircularProgressIndicator(),)
-      );
+      if(zeroMsg){
+        return Center(
+            child: Padding(padding: EdgeInsets.only(top: 20),child: Text("消息列表空荡荡～"),)
+        );
+      }else{
+        return Center(
+            child: Padding(padding: EdgeInsets.only(top: 20),child: CircularProgressIndicator(),)
+        );
+      }
     }
     //有数据 直接展示数据
     List<MsgWidget> _list =[];
@@ -64,6 +71,9 @@ class _MessageIndexState extends State<MessageIndex> with AutomaticKeepAliveClie
     Future<List> _list =  MessageFun?.getMessageList(json.decode(_saveUser)['id']);
     _list.then((value){
       setState(() {
+        if(msgList.length==0){
+          zeroMsg=true;
+        }
         msgList = value;
       });
     });
