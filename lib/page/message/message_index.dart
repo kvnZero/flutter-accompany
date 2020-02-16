@@ -71,7 +71,7 @@ class _MessageIndexState extends State<MessageIndex> with AutomaticKeepAliveClie
     Future<List> _list =  MessageFun?.getMessageList(json.decode(_saveUser)['id']);
     _list.then((value){
       setState(() {
-        if(msgList.length==0){
+        if(value.length==0){
           zeroMsg=true;
         }
         msgList = value;
