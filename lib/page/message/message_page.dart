@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:accompany/common/message_fun.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:accompany/data/event/update_message_list.dart';
 
 class MessagePage extends StatefulWidget {
   const MessagePage({
@@ -60,7 +61,13 @@ class _MessagePageState extends State<MessagePage> {
     });
     super.initState();
   }
-  
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    eventBus.fire(UserLoggedInEvent());
+  }
   
   @override
   Widget build(BuildContext context) {

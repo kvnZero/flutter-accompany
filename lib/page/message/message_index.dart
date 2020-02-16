@@ -3,6 +3,7 @@ import 'package:accompany/widget/msgWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:accompany/common/message_fun.dart';
+import 'package:accompany/data/event/update_message_list.dart';
 
 class MessageIndex extends StatefulWidget {
   @override
@@ -22,6 +23,9 @@ class _MessageIndexState extends State<MessageIndex> with AutomaticKeepAliveClie
   void initState() {
     getList();
     super.initState();
+    eventBus.on<UserLoggedInEvent>().listen((_) {
+      getList();
+    });
   }
 
   @override
@@ -35,12 +39,19 @@ class _MessageIndexState extends State<MessageIndex> with AutomaticKeepAliveClie
           IconButton(icon: Icon(Icons.person_add), onPressed: (){print("跳转添加好友");}),
         ],
       ),
-      body: ListView(
-        children: <Widget>[
-          showList(),
-        ],
-      )
+      body:RefreshIndicator(
+          child: new ListView.builder(
+            itemCount: msgList.length,  // 数据长度
+            itemBuilder: (context, item) {
+              return MsgWidget(message: msgList[item],);
+            },
+          ),
+          onRefresh: _onRefresh)
     );
+  }
+
+  Future<void> _onRefresh()async{
+    getList();
   }
   Widget showList(){
     if(msgList.length==0){
@@ -58,24 +69,32 @@ class _MessageIndexState extends State<MessageIndex> with AutomaticKeepAliveClie
     //有数据 直接展示数据
     List<MsgWidget> _list =[];
     msgList.forEach((value){
-      _list.add(MsgWidget(message: value));
+      _list.add(new MsgWidget(message: value));
     });
-    return Column(
+    return new Column(
       children: _list.map((e)=>e).toList(),
     );
   }
 
-  void getList() async{
+  Future<void> getList() async{
     SharedPreferences _prefs = await SharedPreferences.getInstance();
     String _saveUser = _prefs.getString('user_data');
     Future<List> _list =  MessageFun?.getMessageList(json.decode(_saveUser)['id']);
     _list.then((value){
-      setState(() {
-        if(value.length==0){
+      if(value.length==0){
+        setState(() {
           zeroMsg=true;
-        }
-        msgList = value;
-      });
+        });
+      }else{
+        setState(() {
+          msgList = [];
+        });
+        Future.delayed(Duration(milliseconds: 100), (){
+          setState(() {
+            msgList=value;
+          });
+        });
+      }
     });
 //    Future<Response> response = Dio().post("http://192.168.1.5:8000/getmessagelist/",data: {'token':token});
   }
