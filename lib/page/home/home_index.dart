@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:accompany/widget/myIconButton.dart';
 import 'package:accompany/widget/goodsInfoWidget.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-
+import 'package:accompany/data/classes/goods.dart';
+import 'package:dio/dio.dart';
 class HomeIndex extends StatefulWidget {
   @override
   _HomeIndexState createState() => _HomeIndexState();
 }
 
 class _HomeIndexState extends State<HomeIndex> with AutomaticKeepAliveClientMixin{
+  bool zeroList = false;
+  List goodList = [];
+
 
   @override
   // TODO: implement wantKeepAlive
@@ -16,6 +20,7 @@ class _HomeIndexState extends State<HomeIndex> with AutomaticKeepAliveClientMixi
 
   @override
   void initState() {
+    getList();
     super.initState();
   }
 
@@ -132,7 +137,10 @@ class _HomeIndexState extends State<HomeIndex> with AutomaticKeepAliveClientMixi
       {'image':'https://i03piccdn.sogoucdn.com/bbc8883a8e45c9bf','title':'搜索生生世世生生世世是是是是是是搜索生生世世生生世世是是是是是是是收到是都是大的爱上搜索生生世世生生世世是是是是是是是收到是都是大搜索生生世世生生世世是是是是是是是收到是都是大的爱上的爱上是收到是都是大的爱上'},
       {'image':'https://i01piccdn.sogoucdn.com/5fb1802e5f17a292','title':'搜索生生世世生生世世是搜索生生世世生生世世是是是是是是是收到是都是大的爱上搜索生生世世生生世世是是是是是是是收到是都是大的爱上搜索生生世世生生世世是是是是是是是收到是都是大的爱上搜索生生世世生生世世是是是是是是是收到是都是大的爱上搜索生生世世生生世世是是是是是是是收到是都是大的爱上是是是是是是收到是都是大的爱上'},
     ];
-
+    List<GoodsInfo> _list =[];
+    goodList.forEach((value){
+      _list.add(new GoodsInfo(goods: value));
+    });
     return Container(
       margin: EdgeInsets.only(top : 10,left: 5,right: 5),
 //      padding: EdgeInsets.only(left: 5,right: 5),
@@ -140,27 +148,28 @@ class _HomeIndexState extends State<HomeIndex> with AutomaticKeepAliveClientMixi
         primary: false,
         shrinkWrap: true,
         crossAxisCount: 2,
-        itemCount: 5,
+        itemCount: _list.length,
         physics: NeverScrollableScrollPhysics(),
-        itemBuilder: (BuildContext context, int index) => new GoodsInfo(imageUrl: goodsData[index]['image'], title: goodsData[index]['title'], price: 0, userName: ''),
+        itemBuilder: (BuildContext context, int index) => _list[index],
         staggeredTileBuilder: (index) => new StaggeredTile.fit(1),
         crossAxisSpacing: 5,
         mainAxisSpacing: 5,
       ),
     );
-//    'http://i0.hdslb.com/bfs/face/a9a41c8d0b5aa4fde8f9d4e401605189fbdfac23.jpg'
-//    return GridView(
-//      shrinkWrap: true,
-//      physics: NeverScrollableScrollPhysics(),
-//      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-//      children: <Widget>[
-//        GoodsInfo(),
-//        GoodsInfo(),
-//        GoodsInfo(),
-//        GoodsInfo(),
-//        GoodsInfo(),
-//      ],
-//    );
   }
 
+  Future<void> getList() async{
+    Future<Response> response = Dio().post("http://192.168.1.5:8000/getgoodlist/");
+    response.then((value){
+      if(value.data.length==0){
+        setState(() {
+          zeroList=true;
+        });
+      }else{
+        setState(() {
+          goodList=value.data;
+        });
+      }
+    });
+  }
 }
